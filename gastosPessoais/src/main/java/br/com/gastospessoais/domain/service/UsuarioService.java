@@ -1,5 +1,6 @@
 package br.com.gastospessoais.domain.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -7,6 +8,8 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.gastospessoais.domain.excption.ResourceBadRequestException;
+import br.com.gastospessoais.domain.excption.ResourceNotFoundtException;
 import br.com.gastospessoais.domain.model.Usuario;
 import br.com.gastospessoais.domain.repository.UsuarioRepository;
 import br.com.gastospessoais.dto.usuario.UsuarioRequestDto;
@@ -39,11 +42,11 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDto, UsuarioRe
 	}
 
 	@Override
-	public UsuarioResponseDto obterPorID(Long id) {
+	public UsuarioResponseDto obterPorId(Long id) {
 		Optional<Usuario> optUsuario = usuarioRepository.findById(id);
 
 		if (optUsuario.isEmpty()) {
-			//
+			throw new ResourceNotFoundtException("Não foi possível encontrar o usuário com o id: " + id);
 		}
 
 		return mapper.map(optUsuario.get(), UsuarioResponseDto.class);
@@ -51,17 +54,47 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDto, UsuarioRe
 
 	@Override
 	public UsuarioResponseDto cadastrar(UsuarioRequestDto dto) {
-		return null;
+
+		validarUsuario(dto);
+
+		Usuario usuario = mapper.map(dto, Usuario.class);
+
+		usuario.setId(null);
+		usuario = usuarioRepository.save(usuario);
+
+		return mapper.map(usuario, UsuarioResponseDto.class);
 	}
 
 	@Override
 	public UsuarioResponseDto atualizar(Long id, UsuarioRequestDto dto) {
-		return null;
+
+		UsuarioResponseDto usuarioBanco = obterPorId(id);
+		validarUsuario(dto);
+
+		Usuario usuario = mapper.map(dto, Usuario.class);
+
+		usuario.setId(id);
+		usuario.setDataInativacao(usuarioBanco.getDataInativacao());
+		usuario = usuarioRepository.save(usuario);
+
+		return mapper.map(usuario, UsuarioResponseDto.class);
 	}
 
 	@Override
 	public void deletar(Long id) {
 
+		UsuarioResponseDto usuarioEncontrado = obterPorId(id);
+
+		Usuario usuario = mapper.map(usuarioEncontrado, Usuario.class);
+
+		usuario.setDataInativacao(new Date());
+		usuarioRepository.save(usuario);
 	}
 
+	private void validarUsuario(UsuarioRequestDto dto) {
+
+		if (dto.getEmail() == null || dto.getSenha() == null) {
+			throw new ResourceBadRequestException("E-mail e senha são obrigatórios");
+		}
+	}
 }

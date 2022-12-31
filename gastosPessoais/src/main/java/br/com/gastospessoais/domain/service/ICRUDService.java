@@ -7,7 +7,7 @@ public interface ICRUDService<Req, Res> {
 
 	List<Res> obterTodos();
 
-	Res obterPorID(Long id);
+	Res obterPorId(Long id);
 
 	Res cadastrar(Req dto);
 
