@@ -15,43 +15,42 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.gastospessoais.domain.service.CentroDeCustoService;
-import br.com.gastospessoais.dto.centrodecusto.CentroDeCustoRequestDto;
-import br.com.gastospessoais.dto.centrodecusto.CentroDeCustoResponseDto;
+import br.com.gastospessoais.domain.service.TituloService;
+import br.com.gastospessoais.dto.titulo.TituloRequestDto;
+import br.com.gastospessoais.dto.titulo.TituloResponseDto;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/api/centrodecustos")
-public class CentroDeCustoController {
+@RequestMapping("/api/titulos")
+public class TituloController {
 
 	@Autowired
-	private CentroDeCustoService centroDeCustoService;
+	private TituloService tituloService;
 
 	@GetMapping
-    public ResponseEntity<List<CentroDeCustoResponseDto>> obterTodos(){
-        return ResponseEntity.ok(centroDeCustoService.obterTodos());
-    }
+	public ResponseEntity<List<TituloResponseDto>> obterTodos() {
+		return ResponseEntity.ok(tituloService.obterTodos());
+	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CentroDeCustoResponseDto> obterPorId(@PathVariable Long id) {
-		return ResponseEntity.ok(centroDeCustoService.obterPorId(id));
+	public ResponseEntity<TituloResponseDto> obterPorId(@PathVariable Long id) {
+		return ResponseEntity.ok(tituloService.obterPorId(id));
 	}
 
 	@PostMapping
-	public ResponseEntity<CentroDeCustoResponseDto> cadastrar(@RequestBody CentroDeCustoRequestDto dto) {
-		CentroDeCustoResponseDto centroDeCusto = centroDeCustoService.cadastrar(dto);
+	public ResponseEntity<TituloResponseDto> cadastrar(@RequestBody TituloRequestDto dto) {
+		TituloResponseDto centroDeCusto = tituloService.cadastrar(dto);
 		return new ResponseEntity<>(centroDeCusto, HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<CentroDeCustoResponseDto> atualizar(@PathVariable Long id,
-			@RequestBody CentroDeCustoRequestDto dto) {
-		return ResponseEntity.ok(centroDeCustoService.atualizar(id, dto));
+	public ResponseEntity<TituloResponseDto> atualizar(@PathVariable Long id, @RequestBody TituloRequestDto dto) {
+		return ResponseEntity.ok(tituloService.atualizar(id, dto));
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletar(@PathVariable Long id) {
-		centroDeCustoService.deletar(id);
+		tituloService.deletar(id);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }
