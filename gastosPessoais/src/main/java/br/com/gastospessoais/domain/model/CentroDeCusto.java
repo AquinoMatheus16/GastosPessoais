@@ -33,9 +33,9 @@ public class CentroDeCusto {
 	@JoinColumn(name = "idUsuario")
 	private Usuario usuario;
 
-	@ManyToMany(mappedBy = "centrodecusto")
-	@JsonBackReference
-	private List<Titulo> titulos;
+//	@ManyToMany(mappedBy = "centrodecusto")
+//	@JsonBackReference
+//	private List<Titulo> titulos;
 
 	public Long getId() {
 		return id;
@@ -67,14 +67,6 @@ public class CentroDeCusto {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
-	}
-
-	public List<Titulo> getTitulos() {
-		return titulos;
-	}
-
-	public void setTitulos(List<Titulo> titulos) {
-		this.titulos = titulos;
 	}
 
 }

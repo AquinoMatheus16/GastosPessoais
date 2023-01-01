@@ -10,12 +10,12 @@ public class ErrorResposta {
 
 	private String mensagem;
 
-	public ErrorResposta(String titulo, Integer status, String mensagem, String dataHora) {
+	public ErrorResposta(String dataHora, Integer status, String titulo, String mensagem) {
 		super();
-		this.titulo = titulo;
-		this.status = status;
-		this.mensagem = mensagem;
 		this.dataHora = dataHora;
+		this.status = status;
+		this.titulo = titulo;
+		this.mensagem = mensagem;
 	}
 
 	public String getTitulo() {

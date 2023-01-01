@@ -12,6 +12,8 @@ public class UsuarioResponseDto {
 
 	private String foto;
 
+	private Date dataCadastro;
+
 	private Date dataInativacao;
 
 	public Long getId() {
@@ -44,6 +46,14 @@ public class UsuarioResponseDto {
 
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+
+	public Date getDataCadastro() {
+		return dataCadastro;
+	}
+
+	public void setDataCadastro(Date dataCadastro) {
+		this.dataCadastro = dataCadastro;
 	}
 
 	public Date getDataInativacao() {
