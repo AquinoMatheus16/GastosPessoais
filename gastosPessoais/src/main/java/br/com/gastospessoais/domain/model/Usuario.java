@@ -2,6 +2,7 @@ package br.com.gastospessoais.domain.model;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,13 +12,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Usuario implements UserDetails {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +38,8 @@ public class Usuario implements UserDetails {
 
 	private Date dataInativacao;
 
-//	@OneToMany(mappedBy = "usuario")
-//	private List<Titulo> titulos;
+	@OneToMany(mappedBy = "usuario")
+	private List<Titulo> titulos;
 
 	public Long getId() {
 		return id;
@@ -99,8 +97,15 @@ public class Usuario implements UserDetails {
 		this.dataInativacao = dataInativacao;
 	}
 
-	// == Framework ==
+	public List<Titulo> getTitulos() {
+		return titulos;
+	}
 
+	public void setTitulos(List<Titulo> titulos) {
+		this.titulos = titulos;
+	}
+
+	// #region Framework
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return null;
@@ -135,7 +140,6 @@ public class Usuario implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
-	// == end Framework ==
+	// #endregion
 
 }

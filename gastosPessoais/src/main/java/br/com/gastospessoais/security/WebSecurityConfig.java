@@ -20,21 +20,10 @@ public class WebSecurityConfig {
 	private JwtUtil jwtUtil;
 
 	@Autowired
-	private AuthenticationConfiguration authenticationConfiguration;
-	
+	private AuthenticationConfiguration authConfig;
+
 	@Autowired
 	private UserDetailsSecurityServer userDetailsSecurityServer;
-
-	@Bean
-	public BCryptPasswordEncoder passwordEnconder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
-			throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -44,9 +33,21 @@ public class WebSecurityConfig {
 						.anyRequest().authenticated())
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		http.addFilter(new JwtAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtUtil));
-		http.addFilter(new JwtAuthorizationFilter(authenticationManager(authenticationConfiguration), jwtUtil,userDetailsSecurityServer));
+		http.addFilter(new JwtAuthenticationFilter(authenticationManager(authConfig), jwtUtil));
+		http.addFilter(
+				new JwtAuthorizationFilter(authenticationManager(authConfig), jwtUtil, userDetailsSecurityServer));
 
 		return http.build();
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+			throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }
