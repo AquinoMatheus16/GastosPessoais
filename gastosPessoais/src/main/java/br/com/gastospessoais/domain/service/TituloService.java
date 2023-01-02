@@ -39,7 +39,9 @@ public class TituloService implements ICRUDService<TituloRequestDto, TituloRespo
 	public TituloResponseDto obterPorId(Long id) {
 		Optional<Titulo> optTitulo = tituloRepository.findById(id);
 
-		if (optTitulo.isEmpty()) {
+		Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		if (optTitulo.isEmpty() || optTitulo.get().getUsuario().getId() != usuario.getId()) {
 			throw new ResourceNotFoundtException("Não foi possível encontrar o título com esse id: " + id);
 		}
 
